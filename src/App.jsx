@@ -2,32 +2,30 @@ import { useState } from 'react'
 import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 import './App.css'
+import SampleComponent from './Components/SampleComponent'
+import { BrowserRouter, Route, Routes } from 'react-router-dom'
+import HomePageComponent from './Components/Pages/HomePageComponent/HomePageComponent'
+import SearchPageComponent from './Components/Pages/SearchPageComponent/SearchPageComponent'
+import NavbarComponent from './Components/NavbarComponent/NavbarComponent'
+import CollectionPageComponent from './Components/Pages/CollectionPageComponent/CollectionPageComponent'
 
 function App() {
   const [count, setCount] = useState(0)
 
   return (
     <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+      {/* <SampleComponent/>   */}
+
+      <BrowserRouter>
+
+        <NavbarComponent/>
+        <Routes>
+          <Route exact path='/' element={<HomePageComponent/>}/>
+          <Route exact path='/search' element={<SearchPageComponent/>}/>
+          <Route exact path='/collections' element={<CollectionPageComponent/>}/>
+
+        </Routes>
+      </BrowserRouter>
     </>
   )
 }
