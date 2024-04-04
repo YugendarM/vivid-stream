@@ -1,6 +1,7 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react'
 import VideoCardComponent from '../../VideoCardComponent/VideoCardComponent';
+import { useQuery } from 'react-query';
 
 const SearchPageComponent = () => {
 
@@ -10,19 +11,33 @@ const SearchPageComponent = () => {
   const [query, setQuery] = useState("hope");
   const [page, setPage] = useState(1);
 
-  useEffect(() => {
-    getSearchVideoData();
-  },[page])
+  // useEffect(() => {
+  //   getSearchVideoData();
+  // },[page])
 
-  const getSearchVideoData = async () => {
-    const response = await axios.get(`https://api.pexels.com/v1/videos/search/?page=${page}&per_page=15&query=${query}`,{
+  const getSearchVideoData = async ({queryKey}) => {
+    const response = await axios.get(`https://api.pexels.com/v1/videos/search/?page=${queryKey[2]}&per_page=15&query=${queryKey[1]}`,{
       headers:{
         Authorization: API_KEY
       }
     })
     console.log(response.data);
-    setSearchVideoData(response.data);
+    // setSearchVideoData(response.data);
+    return response.data
   }
+
+  const {data, isLoading, isError, isPreviousData} = useQuery(["searchVideoData", query, page], getSearchVideoData, {
+    keepPreviousData:true
+  })
+  
+
+  if(isLoading){
+    return <div className='h-[100vh] w-[100vh] flex justify-center items-center'>Loading</div>
+  }
+  if(isError){
+    return <div>Error</div>
+  }
+
   return (
    <React.Fragment>
       <h1>Search</h1>
@@ -35,7 +50,7 @@ const SearchPageComponent = () => {
       <div>
         <div className='columns-4 gap-5 w-[1200px] mx-auto space-x-5 pb-28'>
           {
-              searchVideoData.videos && searchVideoData.videos.map((video) => (
+              data.videos && data.videos.map((video) => (
                   <VideoCardComponent key={video.id}  video={video}/>
               ))
           }

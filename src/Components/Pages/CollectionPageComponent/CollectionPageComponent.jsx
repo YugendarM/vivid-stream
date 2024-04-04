@@ -1,31 +1,44 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react'
 import VideoCardComponent from '../../VideoCardComponent/VideoCardComponent';
+import { useQuery } from 'react-query';
 
 const CollectionPageComponent = () => {
 
     const API_KEY = "UBCvzgCVRFOeETcfI4ByMAZcpWaNaI1hLhnbQ7VF4GuTRCUcbwB2iII5"
 
-    const [collectionVideoData, setCollectionVideoData] = useState([]);
+    // const [collectionVideoData, setCollectionVideoData] = useState([]);
     const [page, setPage] = useState(1)
     const [query, setQuery] = useState("common")
 
 
-    useEffect(() => {
-        getCollectionVideoData();
-    },[query, page])
+    // useEffect(() => {
+    //     getCollectionVideoData();
+    // },[query, page])
     
-    const getCollectionVideoData = async () => {
-        const response = await axios.get(`https://api.pexels.com/v1/videos/search/?page=${page}&per_page=20&query=${query}`,{
+    const getCollectionVideoData = async ({queryKey}) => {
+        const response = await axios.get(`https://api.pexels.com/v1/videos/search/?page=${page}&per_page=40&query=${queryKey[1]}`,{
             headers:{
-                // Authorization: process.env.API_KEY
                  Authorization: API_KEY
 
             }
         })
         console.log(response.data.videos);
-        setCollectionVideoData(response.data.videos); 
+        // setCollectionVideoData(response.data.videos); 
+        return response.data.videos
         
+    }
+
+    const {data, isLoading, isError, isPreviousData} = useQuery(["CollectionVideoData",query], getCollectionVideoData, {
+        keepPreviousData: true
+    })
+
+    if(isLoading){
+        return <div>Loading...</div>
+    }
+
+    if(isError){
+        return <div>Error...</div>
     }
 
     const handleClick = (event) => {
@@ -56,7 +69,7 @@ const CollectionPageComponent = () => {
             <div >
                 <div className='columns-4 gap-5 w-[1200px] mx-auto space-x-5 pb-28'>
                 {
-                    collectionVideoData && collectionVideoData.map((video) => (
+                    data && data.map((video) => (
                         <VideoCardComponent key={video.id}  video={video}/>
                     ))
                 }

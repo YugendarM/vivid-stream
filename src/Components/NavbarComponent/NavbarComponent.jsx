@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 
 const NavbarComponent = () => {
   return (
-    <div>
+    <div className='flex justify-between'>
 
       <div className='logo'>
         <Link to={"/"}>
