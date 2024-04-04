@@ -1,5 +1,6 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react'
+import VideoCardComponent from '../../VideoCardComponent/VideoCardComponent';
 
 const CollectionPageComponent = () => {
 
@@ -7,7 +8,7 @@ const CollectionPageComponent = () => {
 
     const [collectionVideoData, setCollectionVideoData] = useState([]);
     const [page, setPage] = useState(1)
-    const [query, setQuery] = useState("general")
+    const [query, setQuery] = useState("common")
 
 
     useEffect(() => {
@@ -15,9 +16,11 @@ const CollectionPageComponent = () => {
     },[query, page])
     
     const getCollectionVideoData = async () => {
-        const response = await axios.get(`https://api.pexels.com/v1/videos/search/?page=${page}&per_page=15&query=${query}`,{
+        const response = await axios.get(`https://api.pexels.com/v1/videos/search/?page=${page}&per_page=20&query=${query}`,{
             headers:{
-                Authorization: API_KEY
+                // Authorization: process.env.API_KEY
+                 Authorization: API_KEY
+
             }
         })
         console.log(response.data.videos);
@@ -50,15 +53,14 @@ const CollectionPageComponent = () => {
             </aside>
 
 
-            <div>
+            <div >
+                <div className='columns-4 gap-5 w-[1200px] mx-auto space-x-5 pb-28'>
                 {
                     collectionVideoData && collectionVideoData.map((video) => (
-                        <div>
-                            <p>{video.id}</p>
-                            <img src={video.image} className='h-20 w-20' />
-                        </div>
+                        <VideoCardComponent key={video.id}  video={video}/>
                     ))
                 }
+                </div>
 
                 <div>
                     <button disabled= {page === 1} onClick={() => setPage((prev) => prev-1)}>Previous Page</button>

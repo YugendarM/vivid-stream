@@ -1,5 +1,6 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react'
+// import ReactPlayer from 'react-player';
 
 const API_KEY = "UBCvzgCVRFOeETcfI4ByMAZcpWaNaI1hLhnbQ7VF4GuTRCUcbwB2iII5"
 
@@ -23,10 +24,12 @@ const SampleComponent = () => {
     // }
   return (
     <div>
-      Sample
+      {/* Sample
       <p className='text-4xl bg-blue-500'>testing</p>
 
-      <video src='https://videos.pexels.com/video-files/6394054/6394054-sd_640_320_24fps.mp4' loop autoPlay="{true}"></video>
+      {/* <video src='https://videos.pexels.com/video-files/6394054/6394054-sd_640_320_24fps.mp4' controls></video> */}
+
+      {/* <ReactPlayer url={"https://videos.pexels.com/video-files/6394054/6394054-sd_640_320_24fps.mp4"} controls= {true} />  */}
     </div>
   )
 }
