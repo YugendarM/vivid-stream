@@ -1,6 +1,9 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 import { FaPlayCircle } from "react-icons/fa";
+import 'react-lazy-load-image-component/src/effects/blur.css';
+import { LazyLoadComponent, LazyLoadImage } from 'react-lazy-load-image-component';
+
 
 
 const VideoCardComponent = ({video}) => {
@@ -12,7 +15,9 @@ const VideoCardComponent = ({video}) => {
             <FaPlayCircle className='text-xl text-white '/>
           </div>
           <div className=''>
-            <img src={video.image}/>
+          <LazyLoadImage
+            effect="blur"
+            src={video.image} />
           </div>
         </div>
       </div>

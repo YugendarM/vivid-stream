@@ -78,7 +78,7 @@ const CollectionPageComponent = () => {
                 <div>
                     <button disabled= {page === 1} onClick={() => setPage((prev) => prev-1)}>Previous Page</button>
                     <p>{page}</p>
-                    <button onClick={() => setPage((prev) => prev+1)}>Next Page</button>
+                    <button disabled={!data.next_page} onClick={() => setPage((prev) => prev+1)}>Next Page</button>
                 </div>
             </div>
 
