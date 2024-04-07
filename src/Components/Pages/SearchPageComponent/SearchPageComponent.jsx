@@ -1,9 +1,14 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react'
 import VideoCardComponent from '../../VideoCardComponent/VideoCardComponent';
-import { LazyLoadComponent } from 'react-lazy-load-image-component';
 
 import { useQuery } from 'react-query';
+import PageSkeletonComponent from '../../PageSkeletonComponent/PageSkeletonComponent';
+
+import { FaChevronLeft } from "react-icons/fa";
+import { FaChevronRight } from "react-icons/fa";
+
+
 
 const SearchPageComponent = () => {
 
@@ -17,6 +22,9 @@ const SearchPageComponent = () => {
   // },[page])
 
   const getSearchVideoData = async ({queryKey}) => {
+    if(queryKey[1] === ""){
+      queryKey[1] = "common"
+    }
     const response = await axios.get(`https://api.pexels.com/v1/videos/search/?page=${queryKey[2]}&per_page=80&query=${queryKey[1]}`,{
       headers:{
         Authorization: API_KEY
@@ -33,7 +41,7 @@ const SearchPageComponent = () => {
   
 
   if(isLoading){
-    return <div className='h-[100vh] w-[100vh] flex justify-center items-center'>Loading</div>
+    return <PageSkeletonComponent/>
   }
   if(isError){
     return <div>Error</div>
@@ -41,27 +49,34 @@ const SearchPageComponent = () => {
 
   return (
    <React.Fragment>
-      <h1>Search</h1>
 
-      <input type='text' onChange={(event) => {setQuery(event.target.value)}}  placeholder='Enter the query' />
-      <button onClick={getSearchVideoData}>Search</button>
+      <div className='flex w-full justify-center items-center gap-4'>
+   
+        <input className='border-2 border-gray-200 rounded-full px-3 py-2 w-1/5 focus:outline-none' type='text' onChange={(event) => {setQuery(event.target.value);  setPage(1)}}  placeholder='Enter for videos' />
+        <button className='bg-vivid-primaryBlue text-white rounded-full px-5 py-2' onClick={getSearchVideoData}>Search</button>
+      </div>
 
 
+      <div className='py-10'>
+        {
+          data && 
+          <div>
+            {/* <p>{data.length} results found for search "{query}"</p> */}
+            <div className='columns-3 gap-5 w-[1200px] mx-auto space-x-5 pb-28'>
+            {
+                data.videos && data.videos.map((video) => (
+                    <VideoCardComponent key={video.id}  video={video}/>
+                ))
+            }
+            
+          </div>
+          </div>
+        }
 
-      <div>
-        <div className='columns-3 gap-5 w-[1200px] mx-auto space-x-5 pb-28'>
-          {
-              data.videos && data.videos.map((video) => (
-                  <VideoCardComponent key={video.id}  video={video}/>
-              ))
-          }
-          
-        </div>
-
-        <div>
-            <button disabled= {page === 1} onClick={() => setPage((prev) => prev-1)}>Previous Page</button>
-            <p>{page}</p>
-            <button disabled= {!data.next_page} onClick={() => setPage((prev) => prev+1)}>Next Page</button>
+        <div className='flex w-full justify-center items-center gap-5'>
+            <button className='text-2xl bg-vivid-primaryBlue rounded-md px-3 py-3 text-white disabled:bg-gray-200 disabled:text-gray-400' disabled= {page === 1} onClick={() => setPage((prev) => prev-1)}><FaChevronLeft /></button>
+            <p className='text-2xl font-semibold'>{page}</p>
+            <button className='text-2xl bg-vivid-primaryBlue rounded-md px-3 py-3 text-white disabled:bg-gray-200 disabled:text-gray-400' disabled= {isPreviousData || !data.next_page} onClick={() => setPage((prev) => prev+1)}><FaChevronRight /></button>
         </div>
       </div>
 

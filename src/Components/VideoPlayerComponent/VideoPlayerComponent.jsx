@@ -3,6 +3,7 @@ import React from 'react'
 import { useEffect } from 'react';
 import { useState } from 'react'
 import { useParams } from 'react-router-dom';
+import defaultProfile from '../../assets/defaultProfile.jpeg'
 
 const VideoPlayerComponent = () => {
 
@@ -27,16 +28,30 @@ const VideoPlayerComponent = () => {
     }
 
   return (
-    <React.Fragment>
-        <h1>VideoPlayerComponent</h1>
-        {/* <ReactPlayer url="https://www.pexels.com/video/a-soldier-s-general-purpose-pouch-7467778/"/> */}
-       <div className='h-[400px] w-[500px]'>
-            {videoData.video_files && 
-            <video controls autoPlay muted className='max-h-full'>
-                <source src={videoData.video_files[0].link} />
-            </video>}
-       </div>
-    </React.Fragment>
+        <main className='flex flex-col justify-center items-center gap-10'>
+            {
+                videoData.user && 
+                <div className='flex justify-between items-center w-[40vw]'>
+                    <div className='flex justify-center items-center'>
+                        <img src={defaultProfile} className='h-14 w-14'/>
+                        <div>
+                            <p className='text-md capitalize'>{videoData.user && videoData.user.name}</p>
+                            <p className='text-sm text-gray-700'>{videoData.user && videoData.user.id}</p>
+                        </div>
+                    </div>
+                    <div>
+                        {videoData.user && <a href={videoData.user.url} className='bg-vivid-primaryBlue text-white rounded-md px-3 py-2 font-medium text-lg'>Browse Creator</a>}
+                    </div>
+                </div>
+            }
+            <div className='h-[500px]'>
+                    {videoData.video_files && 
+                    <video controls autoPlay muted className='max-h-full' preload="auto">
+                        <source src={videoData.video_files[0].link} />
+                    </video>
+                    }
+            </div>
+        </main>
   )
 }
 

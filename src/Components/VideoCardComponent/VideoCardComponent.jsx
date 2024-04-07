@@ -3,6 +3,8 @@ import { Link } from 'react-router-dom'
 import { FaPlayCircle } from "react-icons/fa";
 import 'react-lazy-load-image-component/src/effects/blur.css';
 import { LazyLoadComponent, LazyLoadImage } from 'react-lazy-load-image-component';
+import ImageSkeletonComponent from '../ImageSkeletonComponent/ImageSkeletonComponent';
+
 
 
 
@@ -16,7 +18,8 @@ const VideoCardComponent = ({video}) => {
           </div>
           <div className=''>
           <LazyLoadImage
-            effect="blur"
+            placeholder={<ImageSkeletonComponent/>}
+            // effect="blur"
             src={video.image} />
           </div>
         </div>
